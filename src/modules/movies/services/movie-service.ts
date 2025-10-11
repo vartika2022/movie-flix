@@ -47,12 +47,9 @@ export const MovieService = {
   },
 
   getMovieGenres: async () => {
-    return await httpClient
-      .get("genre/movie/list", {
-        searchParams: {
-          language: "en-US"
-        }
-      })
-      .json<Array<{ id: number; name: string }>>();
+    const data = await httpClient
+      .get("genre/movie/list", { searchParams: { language: "en-US" } })
+      .json<{ genres: Array<{ id: number; name: string }> }>();
+    return data.genres;
   }
 };
