@@ -1,10 +1,19 @@
 import ky from "ky";
 import { QueryClient } from "@tanstack/react-query";
 
-import { BASE_TMDB_API_URL, TMDB_ACCESS_TOKEN } from "@/configs";
+const http = ky;
 
-export const httpClient = ky.extend({
-  prefixUrl: '/api/tmdb?path='
-});
+export function tmdbGet(
+  path: string,
+  searchParams: Record<string, string | number | boolean> = {}
+) {
+  const sp = new URLSearchParams();
+
+  sp.set("path", path.startsWith("/") ? path : `/${path}`);
+
+  Object.entries(searchParams).forEach(([k, v]) => sp.set(k, String(v)));
+
+  return http.get(`/api/tmdb?${sp.toString()}`);
+}
 
 export const queryClient = new QueryClient();
